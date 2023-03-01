@@ -23,8 +23,9 @@
 </head>
 <body>
     <div id="app">
+        <h1>Shopping List</h1>
         <ul>
-            <li v-for="item in shoppinglist">{{item.item}}</li>
+            <li v-for="item in shoppingList" :class="[item.checkoff == true ? 'checkoff' : '']">{{item.item}}</li>
         </ul>
     </div>
     <script>
@@ -32,16 +33,16 @@
         createApp({
             data(){
                 return {
-                   shoppinglist: []
+                   shoppingList: []
                 }
             },
             methods:{
                
             },
             mounted() {
-                axios.get("http://jedw.co.uk/shoppinglist/index.php/shoppinglist/getlist")
+                axios.get("http://localhost/shoppinglist/index.php/getlist")
                 .then(res => {
-                    this.shoppinglist = res.data;
+                    this.shoppingList = res.data;
                 })
                 .catch(error => {
                     console.log(error)
