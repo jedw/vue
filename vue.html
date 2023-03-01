@@ -1,0 +1,78 @@
+<!-- https://vuejs.org/examples/#hello-world -->
+<!-- https://www.positronx.io/handle-ajax-requests-in-vue-js-with-axios-fetch-api/ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Vue</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .red {border : 2px solid #ff0000;}
+        .green {border : 2px solid #00ff00;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{message}}</h1>
+
+        <div v-show="showbox == true">
+            <h1>Box of hidden stuff</h1>
+        </div>
+
+        <p>Enter your username below: </p>
+        <input v-model="uname" :class="[uname.length < 7 ? 'red' : 'green']">
+        <p>Enter your email below: </p>
+        <input v-model="email" :class="[email.toLowerCase().match(regex) ? 'green' : 'red']">
+        <br>
+        <button v-bind:disabled="uname.length < 7">Submit</button>
+
+        <ul>
+            <li v-for="cat in cats">{{cat}}</li>
+        </ul>
+        <p>Add a new cat: </p>
+        <input v-model="newCat">
+        <button v-on:click="addCat">Add cat</button>
+
+        <table>
+            <tr>
+                <th>Name</th><th>Email</th>
+            </tr>
+            <tr v-for="fellow in fellows">
+                <td>{{fellow.name}}</td>
+                <td>{{fellow.email}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const { createApp } = Vue
+        createApp({
+            data(){
+                return {
+                    regex: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    showbox: true,
+                    message: `Welcome to Jonathan's app`,
+                    uname: '',
+                    email: '',
+                    cats:[
+                        'garfield',
+                        'snowball',
+                        'felix',
+                        'topcat',
+                        'sylvester'
+                    ],
+                    newCat: '',
+                    fellows:[
+                        {name: 'Jonathan', email: 'jedwards8@uclan.ac.uk'},
+                        {name: 'Julie', email: 'jallen17@uclan.ac.uk'},
+                        {name: 'Chris', email: 'cfinnigan@uclan.ac.uk'},
+                    ]
+                }
+            },
+            methods:{
+                addCat: function(){
+                    this.cats.push(this.newCat)
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
