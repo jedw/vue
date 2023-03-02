@@ -25,7 +25,7 @@
     <div id="app">
         <h1>Shopping List</h1>
         <input v-model="newItem">
-        <button v-on:click="additem">Add Item</button> 
+        <button v-bind:disabled="newItem.length < 3" v-on:click="additem">Add Item</button> 
         <button v-on:click="clearlist">Clear List</button> 
         <ul>
             <li v-for="item in shoppingList" :class="[item.checkoff == true ? 'checkoff' : '']" v-on:click="checkoff(item.id, item.checkoff)">{{item.item}}</li>
@@ -41,7 +41,7 @@
                 }
             },
             methods: {
-                getlist: function(){
+                getlist: function (){
                     axios.get('http://localhost/shoppinglist/index.php/getlist')
                     .then(res => {
                         this.shoppingList = res.data
@@ -50,7 +50,7 @@
                         console.log(error)
                     })
                 },
-                checkoff: function(id, checkoff){
+                checkoff: function (id, checkoff){
                     checkoff = 1 - checkoff
                     var self = this
                     var data = new URLSearchParams(`id=${id}&checkoff=${checkoff}`);
@@ -60,16 +60,31 @@
                     })
                     .catch(function (error) {
                         console.log(error)
-                    });
+                    })
                 },
-                additem: function(){
-
+                additem: function (){
+                    var self = this
+                    var data = new URLSearchParams(`item=${this.newItem}&checkoff=false`);
+                    axios.post('http://localhost/shoppinglist/index.php/additem', data)
+                    .then (function () {
+                        self.getlist()  
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
                 },
-                clearlist: function(){
-
+                clearlist: function (){
+                    var self = this
+                    axios.get('http://localhost/shoppinglist/index.php/clear')
+                    .then (function () {
+                        self.getlist()  
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
                 }
             },
-            mounted() {
+            mounted () {
                 this.getlist()
             }
         }).mount('#app')
