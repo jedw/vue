@@ -53,7 +53,7 @@
                 checkoff: function (id, checkoff){
                     checkoff = 1 - checkoff
                     var self = this
-                    var data = new URLSearchParams(`id=${id}&checkoff=${checkoff}`);
+                    var data = new URLSearchParams([["id", id],["checkoff", checkoff]]);
                     axios.post('http://localhost/shoppinglist/index.php/checkoff', data)
                     .then (function () {
                         self.getlist()  
@@ -64,7 +64,7 @@
                 },
                 additem: function (){
                     var self = this
-                    var data = new URLSearchParams(`item=${this.newItem}&checkoff=false`);
+                    var data = new URLSearchParams([["item", this.newItem],["checkoff", false]]);
                     axios.post('http://localhost/shoppinglist/index.php/additem', data)
                     .then (function () {
                         self.newItem = ""
