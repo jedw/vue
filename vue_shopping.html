@@ -24,8 +24,11 @@
 <body>
     <div id="app">
         <h1>Shopping List</h1>
+        <input v-model="newItem">
+        <button v-on:click="additem">Add Item</button> 
+        <button v-on:click="clearlist">Clear List</button> 
         <ul>
-            <li v-for="item in shoppingList" :class="[item.checkoff == true ? 'checkoff' : '']">{{item.item}}</li>
+            <li v-for="item in shoppingList" :class="[item.checkoff == true ? 'checkoff' : '']" v-on:click="checkoff(item.id, item.checkoff)">{{item.item}}</li>
         </ul>
     </div>
     <script>
@@ -33,20 +36,41 @@
         createApp({
             data(){
                 return {
-                   shoppingList: []
+                   shoppingList: [],
+                   newItem: ''
                 }
             },
-            methods:{
-               
+            methods: {
+                getlist: function(){
+                    axios.get('http://localhost/shoppinglist/index.php/getlist')
+                    .then(res => {
+                        this.shoppingList = res.data
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+                },
+                checkoff: function(id, checkoff){
+                    checkoff = 1 - checkoff
+                    var self = this
+                    var data = new URLSearchParams(`id=${id}&checkoff=${checkoff}`);
+                    axios.post('http://localhost/shoppinglist/index.php/checkoff', data)
+                    .then (function () {
+                        self.getlist()  
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+                },
+                additem: function(){
+
+                },
+                clearlist: function(){
+
+                }
             },
             mounted() {
-                axios.get("http://localhost/shoppinglist/index.php/getlist")
-                .then(res => {
-                    this.shoppingList = res.data;
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                this.getlist()
             }
         }).mount('#app')
     </script>
