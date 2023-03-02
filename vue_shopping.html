@@ -67,6 +67,7 @@
                     var data = new URLSearchParams(`item=${this.newItem}&checkoff=false`);
                     axios.post('http://localhost/shoppinglist/index.php/additem', data)
                     .then (function () {
+                        self.newItem = ""
                         self.getlist()  
                     })
                     .catch(function (error) {
